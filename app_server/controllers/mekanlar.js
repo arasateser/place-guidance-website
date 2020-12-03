@@ -2,7 +2,8 @@ const anaSayfa=function(req, res, next) {
   res.render('mekanlar-liste', 
   	{ 
   		'baslik': 'Anasayfa',
-  	'sayfaBaslik':{
+      'footer':'Aras Ateşer',
+  	  'sayfaBaslik':{
   		'siteAd':'Mekan32',
   		'aciklama':'Tekirdag daki Tum Dukkanlar!'
   	},
@@ -51,11 +52,12 @@ const mekanBilgisi=function(req, res) {
   res.render('mekan-detay',{ 
   	'baslik':'Mekan Bilgisi',
   	'sayfaBaslik':'Ekkim',
+    'footer':'Aras Ateşer',
   	'mekanBilgisi':{
       'ad':'Ekkim',
   	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
   	  'puan':5,
-  	  'imkanlar':['yapi','malzeme','baba'],
+  	  'imkanlar':['yapi', 'malzeme', 'baba'],
   	  'koordinatlar':{
   	  	'enlem':54.68023,
   	  	'boylam':25.28025
@@ -85,7 +87,8 @@ const mekanBilgisi=function(req, res) {
 }
 
 const yorumEkle=function(req, res, next) {
-  res.render('yorum-ekle', { title: 'Yorum Ekle' });
+  res.render('yorum-ekle', { title: 'Yorum Ekle',
+                            'footer':'Aras Ateşer', });
 }
 
 module.exports={
