@@ -49,10 +49,10 @@ block content
        each yorum in mekanBilgisi.yorumlar
         .row
          .review
-          .well-well-sm.review-header
+          .well.well-sm.review-header
             span.rating
              +puanOlustur(yorum.puan)
-            span.reviewAuthor=yorumYapan
+            span.reviewAuthor=yorum.yorumYapan
             | &nbsp;
             small.reviewTimestamp=yorum.tarih
           .col-xs-12

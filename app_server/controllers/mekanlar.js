@@ -12,35 +12,35 @@ const anaSayfa=function(req, res, next) {
   	  'ad':'Ekkim',
   	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
   	  'puan':5,
-  	  'imkanlar':['yapi','malzeme','baba'],
+  	  'imkanlar':['Yapi','Malzeme','Baba'],
   	  'mesafe':'1km'
   	},
   	{
   	  'ad':'Saras',
-  	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
+  	  'adres':'Orasi Burasi Yolu Alt Tarafi',
   	  'puan':4,
-  	  'imkanlar':['yapi','malzeme','baba'],
+  	  'imkanlar':['Giyim','Outlet'],
   	  'mesafe':'2km'
   	},
   	{
   	  'ad':'Uzay',
-  	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
+  	  'adres':'Uzay Sitesi Buyuk Teleskop Yani',
   	  'puan':3,
-  	  'imkanlar':['yapi','malzeme','baba'],
+  	  'imkanlar':['Teleskop','Hubble','Istasyon'],
   	  'mesafe':'3km'
   	},
   	{
   	  'ad':'Salcano',
-  	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
+  	  'adres':'Sahil Seridi bilmemne numara',
   	  'puan':2,
-  	  'imkanlar':['yapi','malzeme','baba'],
+  	  'imkanlar':['Bisiklet','Spor'],
   	  'mesafe':'4km'
   	},
   	{
   	  'ad':'Sporcum',
-  	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
-  	  'puan':5,
-  	  'imkanlar':['yapi','malzeme','baba'],
+  	  'adres':'Isleyen Demir Pas Tutmaz Sokak',
+  	  'puan':1,
+  	  'imkanlar':['Spor','Agirlik','Fitness'],
   	  'mesafe':'5km'
   	},
   	]
@@ -76,7 +76,7 @@ const mekanBilgisi=function(req, res) {
   	  ],
   	  'yorumlar':[
   	    {
-  	  	'yorumYapan': 'Aras Ateser',
+  	  	'yorumYapan':'Aras Ateser',
   	  	'puan':5,
   	  	'tarih': '1 Aralik 2020',
   	  	'yorumMetni':'Harika'
