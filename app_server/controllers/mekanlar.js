@@ -17,21 +17,21 @@ const anaSayfa=function(req, res, next) {
   	{
   	  'ad':'Saras',
   	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
-  	  'puan':5,
+  	  'puan':4,
   	  'imkanlar':['yapi','malzeme','baba'],
   	  'mesafe':'2km'
   	},
   	{
   	  'ad':'Uzay',
   	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
-  	  'puan':5,
+  	  'puan':3,
   	  'imkanlar':['yapi','malzeme','baba'],
   	  'mesafe':'3km'
   	},
   	{
   	  'ad':'Salcano',
   	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
-  	  'puan':5,
+  	  'puan':2,
   	  'imkanlar':['yapi','malzeme','baba'],
   	  'mesafe':'4km'
   	},
