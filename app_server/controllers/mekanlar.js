@@ -1,98 +1,179 @@
-const anaSayfa=function(req, res, next) {
-  res.render('mekanlar-liste', 
-  	{ 
-  		'baslik': 'Anasayfa',
-      'footer':'Aras Ateşer',
-  	  'sayfaBaslik':{
-  		'siteAd':'Mekan32',
-  		'aciklama':'Tekirdag daki Tum Dukkanlar!'
+var request  = require('postman-request');
+var apiSecenekleri = {
+	sunucu : "http://localhost:3000",
+	apiYolu: '/api/mekanlar/'
+}
+var istekSecenekleri
+var mesafeyiFormatla = function(mesafe){
+	var yeniMesafe, birim;
+	if(mesafe>1000){
+		yeniMesafe = parseFloat(mesafe/1000).toFixed(2);
+		birim = ' km';
+	} else {
+		yeniMesafe = parseFloat(mesafe).toFixed(1);
+		birim = ' m';
+	}
+	  return yeniMesafe + birim;
+    }
+
+    var anaSayfaOlustur = function(req, res, cevap, mekanListesi){
+	var mesaj;
+if (!(mekanListesi instanceof Array)) {
+	mesaj = "API HATASI: Bir şeyler ters gitti";
+	mekanListesi = [];
+} else {
+	if(!mekanListesi.lenght){
+		mesaj = "Civardaka herhangi bir mekan bulunamadi!";
+	}
+}
+res.render('mekanlar-liste',
+  {
+  	baslik: 'Mekan32',
+  	sayfaBaslik:{
+  		siteAd:'Mekan32',
+  		aciklama:'Ispartadaki Tum Mekanlar'
   	},
-  	'mekanlar':[
-  	{
-  	  'ad':'Ekkim',
-  	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
-  	  'puan':5,
-  	  'imkanlar':['Yapi','Malzeme','Baba'],
-  	  'mesafe':'1km'
-  	},
-  	{
-  	  'ad':'Saras',
-  	  'adres':'Orasi Burasi Yolu Alt Tarafi',
-  	  'puan':4,
-  	  'imkanlar':['Giyim','Outlet'],
-  	  'mesafe':'2km'
-  	},
-  	{
-  	  'ad':'Uzay',
-  	  'adres':'Uzay Sitesi Buyuk Teleskop Yani',
-  	  'puan':3,
-  	  'imkanlar':['Teleskop','Hubble','Istasyon'],
-  	  'mesafe':'3km'
-  	},
-  	{
-  	  'ad':'Salcano',
-  	  'adres':'Sahil Seridi bilmemne numara',
-  	  'puan':2,
-  	  'imkanlar':['Bisiklet','Spor'],
-  	  'mesafe':'4km'
-  	},
-  	{
-  	  'ad':'Sporcum',
-  	  'adres':'Isleyen Demir Pas Tutmaz Sokak',
-  	  'puan':1,
-  	  'imkanlar':['Spor','Agirlik','Fitness'],
-  	  'mesafe':'5km'
-  	},
-  	]
-  }
-  );
+  	//footer:footer,
+  	mekanlar:mekanListesi,
+  	mesaj: mesaj,
+  	cevap:cevap
+});
 }
 
-const mekanBilgisi=function(req, res) {
-  res.render('mekan-detay',{ 
-  	'baslik':'Mekan Bilgisi',
-  	'sayfaBaslik':'Ekkim',
-    'footer':'Aras Ateşer',
-  	'mekanBilgisi':{
-      'ad':'Ekkim',
-  	  'adres':'Sanayi Sitesi Şarap Fabrikası Yolu No:63',
-  	  'puan':5,
-  	  'imkanlar':['yapi', 'malzeme', 'baba'],
-  	  'koordinatlar':{
-  	  	'enlem':54.68023,
-  	  	'boylam':25.28025
-  	  },
-  	  'saatler':[
-        {
-      	 'gunler':'Pazartesi-Cuma',
-      	 'acilis':'5:00',
-      	 'kapanis':'22:00',
-      	 'kapali':false
-        },
-        {
-      	 'gunler':'Pazar',
-         'kapali':true
-        }
-  	  ],
-  	  'yorumlar':[
-  	    {
-  	  	'yorumYapan':'Aras Ateser',
-  	  	'puan':5,
-  	  	'tarih': '1 Aralik 2020',
-  	  	'yorumMetni':'Harika'
-  	    }
-  	 ]
-  	}
-  });
+const anaSayfa=function(req, res) {
+	istekSecenekleri=
+	{
+		url : apiSecenekleri.sunucu + apiSecenekleri.apiYolu,
+		method : "GET",
+		json : {},
+		qs : {
+			enlem : req.query.enlem,
+			boylam : req.query.boylam
+		}
+	};
+	request(
+	 istekSecenekleri,
+   	 function(hata, cevap, mekanlar) {
+		var i, gelenMekanlar;
+		gelenMekanlar = mekanlar;
+		if(!hata && gelenMekanlar.lenght){
+			for(i=0; i<gelenMekanlar.lenght; i++){
+				gelenMekanlar[i].mesafe =
+				mesafeyiFormatla(gelenMekanlar[i].mesafe);
+			}
+		}
+		anaSayfaOlustur(req, res, cevap, gelenMekanlar);
+	 }
+	);
 }
+
+var detaySayfasiOlustur = function(req, res, mekanDetaylari){
+	res.render('mekan-detay',
+	{
+		baslik : mekanDetaylari.ad,
+		//footer: footer,
+		sayfaBaslik : mekanDetaylari.ad,
+		mekanBilgisi : mekanDetaylari
+});
+}
+
+var hataGoster = function(req, res, durum){
+	var baslik, icerik;
+	if(durum==404){
+		baslik="404, Sayfa Bulunamadi";
+		icerik = "Kusura bakma sayfayi bulamadik";
+	}
+	else{
+		baslik=durum+", bir seyler ters gitti";
+		icerik="ters giden bir seyler var";
+	}
+	res.status(durum);
+	res.render('error',{
+		baslik:baslik,
+		icerik:icerik
+	});
+};
+
+var mekanBilgisiGetir = function (req, res, callback){
+	var istekSecenekleri;
+	istekSecenekleri = {
+		url: apiSecenekleri.sunucu + apiSecenekleri.apiYolu + req.params.mekanid,
+		method : "GET",
+		json : {}
+	};
+	request(
+		istekSecenekleri,
+		function(hata, cevap, mekanDetaylari){
+			var gelenMekan = mekanDetaylari;
+			if(!hata){
+				gelenMekan.koordinatlar = {
+					enlem : mekanDetaylari.koordinatlar[0],
+					boylam : mekanDetaylari.koordinatlar[1]
+				};
+				callback(req, res, gelenMekan);
+			} else {
+				hataGoster(req, res, cevap.statusCode);
+			}
+		}
+		);
+	};
+
+const mekanBilgisi=function(req, res,callback) {
+	mekanBilgisiGetir(req, res, function(req, res, cevap){
+		detaySayfasiOlustur(req, res, cevap);
+	});
+};
+
+var yorumSayfasiOlustur = function(req, res, mekanBilgisi){
+	res.render('yorum-ekle',{baslik:mekanBilgisi.ad+'Mekanina yorum ekle',
+		sayfaBaslik:mekanBilgisi.ad+'mekanina yorum ekle',
+		hata: req.query.hata
+		//footer:footer
+	});
+};
 
 const yorumEkle=function(req, res, next) {
-  res.render('yorum-ekle', { title: 'Yorum Ekle',
-                            'footer':'Aras Ateşer', });
+	mekanBilgisiGetir(req, res, function(req, res, cevap){
+		yorumSayfasiOlustur(req, res, cevap);
+	});
 }
+
+const yorumumuEkle=function(req, res){
+	var istekSecenekleri, gonderilenYorum, mekanid;
+	mekanid = req.params.mekanid;
+	gonderilenYorum = {
+		yorumYapan: req.body.name,
+		puan: parseInt(req.body.ratin, 10),
+		yorumMetni: req.body.review
+	};
+	istekSecenekleri = {
+		url : apiSecenekleri.sunucu + apiSecenekleri.apiYolu+mekanid+'/yorumlar',
+		method : "POST",
+		json : gonderilenYorum
+	};
+	if(gonderilenYorum.yorumYapan || !gonderilenYorum.puan || !gonderilenYorum.yorumMetni) {
+		res.redirect('/mekan/'+ mekanid + '/yorum/yeni?hata=evet');
+	} else {
+		request(
+			istekSecenekleri,
+			function(hata, cevap, body){
+				if(cevap.statusCode === 201) {
+					res.redirect('/mekan/' + mekanid);
+				}
+				else if(cevap.statusCode === 400 && body.name && body.name==="ValidationError") {
+					res.redirect('/mekan/'+ mekanid + '/yorum/yeni?hata=evet');
+			}
+			else {
+				hataGoster(req, res, cevap.statusCode);
+			}
+	}
+	);
+}
+};
 
 module.exports={
 	anaSayfa,
 	mekanBilgisi,
-	yorumEkle
+	yorumEkle,
+	yorumumuEkle
 }
