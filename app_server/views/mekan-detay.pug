@@ -1,5 +1,6 @@
 extends layout
 include ortak_fonksiyonlar/fonksiyonlar
+block content
  .row.page-header
   .col-lg-12
     h1=sayfaBaslik
@@ -12,13 +13,13 @@ include ortak_fonksiyonlar/fonksiyonlar
         p=mekanBilgisi.adres
         .panel.panel-primary
          .panel-heading
-            h2.panel-title Acilis Saatleri
+            h2.panel-title Açılış Saatleri
          .panel-body
           each saat in mekanBilgisi.saatler
-             p
-                | #{saat.gunler}:
+            p
+                | #{saat.gunler}: 
                 if(saat.kapali)
-                 | Kapali
+                 | Kapalı
                 else
                  | #{saat.acilis}-#{saat.kapanis}
         .panel.panel-primary
@@ -27,9 +28,10 @@ include ortak_fonksiyonlar/fonksiyonlar
          .panel-body
             each imkan in mekanBilgisi.imkanlar
              span.label.label-warning
-                span.glyphicon.glyphicon-ok
+                span.glyphicon.glypicon-ok
                 | &nbsp; #{imkan}
-             | &nbsp;
+             | &nbsp; 
+            
      .col-xs-12.col-sm-6.location-map
       .panel.panel-primary
         .panel-heading
@@ -43,17 +45,17 @@ include ortak_fonksiyonlar/fonksiyonlar
     .panel.panel-primary.review-panel
       .panel-heading
         -var mekanid=mekanBilgisi._id
-        a.btn.btn-default.pull-right(href='/mekan/'+mekanid+'yorum/yeni') Yorum Ekle
-        h2.panel-title Musteri Yorumlari
+        a.btn.btn-default.pull-right(href='/mekan/'+mekanid+'/yorum/yeni') Yorum Ekle
+        h2.panel-title Müşteri Yorumları
       .panel-body.review-container
-       each yorum in mekanBilgisi.yorumlar
-        .row
-         .review
-          .well.well-sm.review-header
-            span.rating
-             +puanOlustur(yorum.puan)
-            span.reviewAuthor #{yorum.yorumYapan},
-            small.reviewTimestamp
-              +tarihFormatla(yorum.tarih)
-          .col-xs-12
-             p=yorum.yorumMetni
+        each yorum in mekanBilgisi.yorumlar
+         .row
+          .review
+           .well.well-sm.review-header
+             span.rating
+              +puanOlustur(yorum.puan)
+             span.reviewAuthor #{yorum.yorumYapan},
+             small.reviewTimestamp
+               +tarihiFormatla(yorum.tarih)
+           .col-xs-12
+              p #{yorum.yorumMetni}

@@ -5,7 +5,7 @@ $('#yorumEkle').submit(function (e) {
 			if($('alert.alert-danger').length) {
 				$('.alert.alert-danger').show();
 			} else {
-				$(this).prepend('<div role ="alert" class"alert alert-danger"> Tum alanlar gereklidir!</div>');
+				$(this).prepend('<div role ="alert" class="alert alert-danger"> Tum alanlar gereklidir!</div>');
 			}
 			return false;
 		}
